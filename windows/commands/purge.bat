@@ -1,19 +1,24 @@
 @echo off
 
 IF [%1] == ["merged"] (
-    echo This command will delete all local branches that have been merged & echo This may include local branches with un-pushed changes
+    echo This command will delete all local branches that have been merged & echo This also includes local branches with no pushed changes
+
+    :choice
+    set /P c=Are you sure you want to continue? [Y/N]
+    if /I "%c%" EQU "Y" goto :continueMerged
+    if /I "%c%" EQU "N" goto :cancel
+)
+
+IF [%1] == ["deleted"] (
+    echo This command will delete all local branches that have been merged & echo This also includes local branches with no pushed changes
 
     :choice
     set /P c=Are you sure you want to continue? [Y/N]
     if /I "%c%" EQU "Y" goto :continueMerged
     if /I "%c%" EQU "N" goto :cancel
 ) ELSE (
-    echo This command will delete all local branches that have been merged & echo This may include local branches with un-pushed changes
-
-    :choice
-    set /P c=Are you sure you want to continue? [Y/N]
-    if /I "%c%" EQU "Y" goto :continueDeleted
-    if /I "%c%" EQU "N" goto :cancel
+    echo git purge requires an argument & echo Usage: & echo git purge deleted & echo git purge merged
+    goto :cancel
 )
 
 :continueMerged
