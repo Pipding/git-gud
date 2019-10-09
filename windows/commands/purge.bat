@@ -38,8 +38,8 @@ git checkout master
 git pull
 echo Pruning remote
 git remote prune origin
-echo Removing local branches withoutupstreams
-for /f "usebackq" %%B in (`git branch --merged^|findstr /v /c:"* " /c:"master"`) do @git branch -d %%B
+echo Removing local branches without upstreams
+powershell -Command "& {git branch --list --format '%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | ? { $_ -ne '' } | % { git branch -D $_ }}"
 echo Remaining branches:
 git branch -vv
 
