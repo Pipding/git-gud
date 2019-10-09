@@ -1,24 +1,24 @@
 @echo off
 
-IF [%1] == ["merged"] (
+IF [%1] == [merged] (
     echo This command will delete all local branches that have been merged into master & echo This includes local branches with no pushed changes
 
     :choice
-    set /P c=Are you sure you want to continue? [Y/N]
-    if /I "%c%" EQU "Y" goto :continueMerged
-    if /I "%c%" EQU "N" goto :cancel
+    set /P mc=Are you sure you want to continue? [Y/N]
+    if /I "%mc%" EQU "Y" goto:continueMerged
+    if /I "%mc%" EQU "N" goto:EOF
 )
 
-IF [%1] == ["deleted"] (
+IF [%1] == [deleted] (
     echo This command will delete all local branches that have been deleted from the remote
 
     :choice
-    set /P c=Are you sure you want to continue? [Y/N]
-    if /I "%c%" EQU "Y" goto :continueDeleted
-    if /I "%c%" EQU "N" goto :cancel
+    set /P dc=Are you sure you want to continue? [Y/N]
+    if /I "%dc%" EQU "Y" goto:continueDeleted
+    if /I "%dc%" EQU "N" goto:EOF
 ) ELSE (
     echo git purge requires an argument & echo Usage: & echo git purge deleted & echo git purge merged
-    goto :cancel
+    goto:EOF
 )
 
 :continueMerged
@@ -31,6 +31,7 @@ echo Removing local branches with merged upstreams
 for /f "usebackq" %%B in (`git branch --merged^|findstr /v /c:"* " /c:"master"`) do @git branch -d %%B
 echo Remaining branches:
 git branch -vv
+goto:EOF
 
 :continueDeleted
 echo Switching to master
@@ -42,5 +43,4 @@ echo Removing local branches without upstreams
 powershell -Command "& {git branch --list --format '%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | ? { $_ -ne '' } | % { git branch -D $_ }}"
 echo Remaining branches:
 git branch -vv
-
-:cancel
+goto:EOF
