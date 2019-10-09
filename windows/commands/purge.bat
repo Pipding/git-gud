@@ -52,7 +52,7 @@ echo Pruning remote
 git remote prune origin
 git remote update origin --prune
 echo Removing local branches without upstreams
-powershell -Command "& {git branch --list --format '%(if:equals=[gone])%(upstream:track)%(then)%(refname:short)%(end)' | ? { $_ -ne '' } | % { git branch -D $_ }}"
+powershell -Command "& {git branch --list --format '%%(if:equals=[gone])%%(upstream:track)%%(then)%%(refname:short)%%(end)' | ? { $_ -ne '' } | %% { git branch -D $_ }}"
 echo Remaining branches:
 git branch -vv
 goto :EOF
