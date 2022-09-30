@@ -16,6 +16,6 @@ if not errorlevel 1 (
     pause
 ) else (
     echo Git doesn't appear to be available
-    echo Try adding git to your PATH variable or running this command from the location where you normaly use git
+    echo Try adding git to your PATH variable or running this command from the location where you normally use git
     pause
 )
